@@ -1,0 +1,2114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ids xmlns="http://standards.buildingsmart.org/IDS" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://standards.buildingsmart.org/IDS http://standards.buildingsmart.org/IDS/1.0/ids.xsd">
+    <info>
+        <title>IDS for checking OIB 2 Table 1b - Building class 4</title>
+        <copyright>TU Wien</copyright>
+        <date>2024-06-06</date>
+    </info>
+    <specifications>
+        <specification name="1.1 Load-bearing elements (Wall) in the top storey (except slabs and walls forming fire compartments)"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCWALL</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                    <property dataType="IFCLENGTHMEASURE">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingStoreyData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>EscapeLevel</simpleValue>
+                        </baseName>
+                    </property>
+                </partOf>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>LoadBearing</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>true</simpleValue>
+                    </value>
+                </property>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>Compartmentation</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>false</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 30" />
+                            <xs:enumeration value="R 60" />
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                            <xs:enumeration value="REI 30" />
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />                            
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="1.1 Load-bearing elements (Beam) in the top storey (except slabs and walls forming fire compartments)"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCBEAM</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                    <property dataType="IFCLENGTHMEASURE">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingStoreyData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>EscapeLevel</simpleValue>
+                        </baseName>
+                    </property>
+                </partOf>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_BeamCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>LoadBearing</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>true</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_BeamCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 30" />
+                            <xs:enumeration value="R 60" />
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="1.1 Load-bearing elements (Column) in the top storey (except slabs and walls forming fire compartments)"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCCOLUMN</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                    <property dataType="IFCLENGTHMEASURE">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingStoreyData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>EscapeLevel</simpleValue>
+                        </baseName>
+                    </property>
+                </partOf>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_ColumnCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>LoadBearing</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>true</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_ColumnCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 30" />
+                            <xs:enumeration value="R 60" />
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="1.2 Load-bearing elements (Wall) in other above-ground storeys (except slabs and walls forming fire compartments)"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCWALL</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>LoadBearing</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>true</simpleValue>
+                    </value>
+                </property>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>Compartmentation</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>false</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 60" />
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="1.2 Load-bearing elements (Beam) in other above-ground storeys (except slabs and walls forming fire compartments)"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCBEAM</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_BeamCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>LoadBearing</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>true</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_BeamCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 60" />
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="1.2 Load-bearing elements (Column) in other above-ground storeys (except slabs and walls forming fire compartments)"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCCOLUMN</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_ColumnCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>LoadBearing</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>true</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_ColumnCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 60" />
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="1.3 Load-bearing elements (Wall) in underground storeys (except slabs and walls forming fire compartments)"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCWALL</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>false</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>LoadBearing</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>true</simpleValue>
+                    </value>
+                </property>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>Compartmentation</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>false</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="1.3 Load-bearing elements (Beam) in underground storeys (except slabs and walls forming fire compartments)"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCBEAM</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>false</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_BeamCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>LoadBearing</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>true</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_BeamCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="1.3 Load-bearing elements (Column) in underground storeys (except slabs and walls forming fire compartments)"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCCOLUMN</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>false</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_ColumnCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>LoadBearing</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>true</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_ColumnCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <!--2. Partition walls are used to seperate different units-->
+        <specification name="2.1 Partition walls in the top storey (excluding staircase walls)"
+        ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCWALL</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                    <property dataType="IFCLENGTHMEASURE">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingStoreyData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>EscapeLevel</simpleValue>
+                        </baseName>
+                    </property>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>StaircaseType</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>OIB2Tab2ab</simpleValue>
+                        </value>
+                    </property>
+                    <multiElementProcessing>noElementMayComply</multiElementProcessing>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>UnitNumber</simpleValue>
+                        </baseName>
+                    </property>
+                    <multiElementProcessing>differentPropertyValuesForAnyElement</multiElementProcessing>
+                </partOf>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="EI 60" />
+                            <xs:enumeration value="EI 90" />
+                            <xs:enumeration value="EI 120" />
+                            <xs:enumeration value="EI 180" />
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="2.2 Partition walls in above-ground storeys (excluding staircase walls)"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCWALL</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>StaircaseType</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>OIB2Tab2ab</simpleValue>
+                        </value>
+                    </property>
+                    <multiElementProcessing>noElementMayComply</multiElementProcessing>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>UnitNumber</simpleValue>
+                        </baseName>
+                    </property>
+                    <multiElementProcessing>differentPropertyValuesForAnyElement</multiElementProcessing>
+                </partOf>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="EI 60" />
+                            <xs:enumeration value="EI 90" />
+                            <xs:enumeration value="EI 120" />
+                            <xs:enumeration value="EI 180" />
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="2.3 Partition walls in underground storeys (excluding staircase walls)"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCWALL</simpleValue>
+                    </name>
+                </entity>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>false</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>StaircaseType</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>OIB2Tab2ab</simpleValue>
+                        </value>
+                    </property>
+                    <multiElementProcessing>noElementMayComply</multiElementProcessing>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>UnitNumber</simpleValue>
+                        </baseName>
+                    </property>
+                    <multiElementProcessing>differentPropertyValuesForAnyElement</multiElementProcessing>
+                </partOf>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="EI 90" />
+                            <xs:enumeration value="EI 120" />
+                            <xs:enumeration value="EI 180" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <!-- 2.4 Terraced houses are not considered-->
+        <!-- 3.1 not possible - Placement at the site boundary is not verifiable.-->
+        <specification name="3.2 Other fire compartment walls" ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCWALL</simpleValue>
+                    </name>
+                </entity>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>Compartmentation</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>true</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_WallCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="EI 90" />
+                            <xs:enumeration value="EI 120" />
+                            <xs:enumeration value="EI 180" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="3.2 Other fire compartment slabs" ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCSLAB</simpleValue>
+                    </name>
+                </entity>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <property dataType="IFCBOOLEAN">
+                    <propertySet>
+                        <simpleValue>Pset_SlabCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>Compartmentation</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>true</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_SlabCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="EI 90" />
+                            <xs:enumeration value="EI 120" />
+                            <xs:enumeration value="EI 180" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="4.1 Slabs above the top storey"
+        ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCSLAB</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                    <property dataType="IFCLENGTHMEASURE">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingStoreyData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>EscapeLevel</simpleValue>
+                        </baseName>
+                    </property>
+                </partOf>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_SlabCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 30" />
+                            <xs:enumeration value="R 60" />
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                            <xs:enumeration value="REI 30" />
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="4.1 Sloping roofs above the top storey (slope smaller or equal to 60°)"
+        ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCROOF</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                    <property dataType="IFCLENGTHMEASURE">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingStoreyData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>EscapeLevel</simpleValue>
+                        </baseName>
+                    </property>
+                </partOf>
+                <property dataType="IFCREAL">
+                    <propertySet>
+                        <simpleValue>ZDB_RoofData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>RoofSlope</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:double">
+                            <xs:minExclusive value="0" />
+                            <xs:maxInclusive value="60" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_RoofCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 30" />
+                            <xs:enumeration value="R 60" />
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                            <xs:enumeration value="REI 30" />
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="4.2 Partition slabs above the top storey"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCSLAB</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                    <property dataType="IFCLENGTHMEASURE">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingStoreyData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>EscapeLevel</simpleValue>
+                        </baseName>
+                    </property>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>UnitNumber</simpleValue>
+                        </baseName>
+                    </property>
+                    <multiElementProcessing>differentPropertyValuesForAnyElement</multiElementProcessing>
+                </partOf>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_SlabCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="4.2 Partition sloping roofs (slope smaller or equal to 60°) above the top storey"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCROOF</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                    <property dataType="IFCLENGTHMEASURE">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingStoreyData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>EscapeLevel</simpleValue>
+                        </baseName>
+                    </property>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>UnitNumber</simpleValue>
+                        </baseName>
+                    </property>
+                    <multiElementProcessing>differentPropertyValuesForAnyElement</multiElementProcessing>
+                </partOf>
+                <property dataType="IFCREAL">
+                    <propertySet>
+                        <simpleValue>ZDB_RoofData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>RoofSlope</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:double">
+                            <xs:minExclusive value="0" />
+                            <xs:maxInclusive value="60" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_RoofCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="4.3 Partition slabs above other above-ground storeys"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCSLAB</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>UnitNumber</simpleValue>
+                        </baseName>
+                    </property>
+                    <multiElementProcessing>differentPropertyValuesForAnyElement</multiElementProcessing>
+                </partOf>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_SlabCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="4.3 Partition sloping roofs (slope smaller or equal to 60°) above other above-ground storeys"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCROOF</simpleValue>
+                    </name>
+                </entity>
+                <partOf >
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>UnitNumber</simpleValue>
+                        </baseName>
+                    </property>
+                    <multiElementProcessing>differentPropertyValuesForAnyElement</multiElementProcessing>
+                </partOf>
+                <property dataType="IFCREAL">
+                    <propertySet>
+                        <simpleValue>ZDB_RoofData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>RoofSlope</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:double">
+                            <xs:minExclusive value="0" />
+                            <xs:maxInclusive value="60" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_RoofCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="4.4 Slabs inside flats or operational units in above-ground storeys"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCSLAB</simpleValue>
+                    </name>
+                </entity>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>UnitNumber</simpleValue>
+                        </baseName>
+                    </property>
+                    <multiElementProcessing>samePropertyValuesForAllElements</multiElementProcessing>
+                </partOf>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_SlabCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 30" />
+                            <xs:enumeration value="R 60" />
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                            <xs:enumeration value="REI 30" />
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="4.4 Sloping roofs (slope smaller or equal to 60°) inside flats or operational units in above-ground storeys"
+            ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCROOF</simpleValue>
+                    </name>
+                </entity>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>true</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>UnitNumber</simpleValue>
+                        </baseName>
+                    </property>
+                    <multiElementProcessing>samePropertyValuesForAllElements</multiElementProcessing>
+                </partOf>
+                <property dataType="IFCREAL">
+                    <propertySet>
+                        <simpleValue>ZDB_RoofData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>RoofSlope</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:double">
+                            <xs:minExclusive value="0" />
+                            <xs:maxInclusive value="60" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_RoofCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 30" />
+                            <xs:enumeration value="R 60" />
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                            <xs:enumeration value="REI 30" />
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="4.5 Slabs above underground storeys" ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCSLAB</simpleValue>
+                    </name>
+                </entity>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>false</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_SlabCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="4.5 Sloping roofs (slope smaller or equal to 60°) above underground storeys" ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCROOF</simpleValue>
+                    </name>
+                </entity>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDINGSTOREY</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLOGICAL">
+                        <propertySet>
+                            <simpleValue>Pset_BuildingStoreyCommon</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>AboveGround</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>false</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <property dataType="IFCREAL">
+                    <propertySet>
+                        <simpleValue>ZDB_RoofData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>RoofSlope</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:double">
+                            <xs:minExclusive value="0" />
+                            <xs:maxInclusive value="60" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_RoofCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="5 Balcony slabs" ifcVersion="IFC4">
+            <applicability>
+                <entity>
+                    <name>
+                        <simpleValue>IFCSLAB</simpleValue>
+                    </name>
+                </entity>
+                <partOf>
+                    <entity>
+                        <name>
+                            <simpleValue>IFCBUILDING</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_BuildingData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>BuildingClass</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>GK4</simpleValue>
+                        </value>
+                    </property>
+                </partOf>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <attribute>
+                        <name>
+                            <simpleValue>LongName</simpleValue>
+                        </name>
+                        <value>
+                            <simpleValue>Balkon</simpleValue>
+                        </value>
+                    </attribute>
+                </partOf>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_SlabCommon</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>FireRating</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="R 30" />
+                            <xs:enumeration value="R 60" />
+                            <xs:enumeration value="R 90" />
+                            <xs:enumeration value="R 120" />
+                            <xs:enumeration value="R 180" />
+                            <xs:enumeration value="REI 30" />
+                            <xs:enumeration value="REI 60" />
+                            <xs:enumeration value="REI 90" />
+                            <xs:enumeration value="REI 120" />
+                            <xs:enumeration value="REI 180" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+    </specifications>
+</ids>

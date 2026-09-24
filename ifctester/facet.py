@@ -20,17 +20,14 @@ from __future__ import annotations
 
 import builtins
 import re
-from collections.abc import Sequence
-from functools import cache, lru_cache
+from functools import lru_cache
 from logging import Logger
 from typing import TYPE_CHECKING, Any, Literal, Optional, TypedDict, Union
 
 import ifcopenshell.util.classification
 import ifcopenshell.util.element
 import ifcopenshell.util.unit
-from elementpath.regex import translate_pattern
-
-translate_pattern = cache(translate_pattern)
+from xmlschema.validators import identities
 
 if TYPE_CHECKING:
     from .ids import Specification
@@ -117,8 +114,8 @@ class Facet:
         return self
 
     def filter(
-        self, ifc_file: ifcopenshell.file, elements: Optional[Sequence[ifcopenshell.entity_instance]]
-    ) -> Sequence[ifcopenshell.entity_instance]:
+        self, ifc_file: ifcopenshell.file, elements: Optional[list[ifcopenshell.entity_instance]]
+    ) -> list[ifcopenshell.entity_instance]:
         if not elements:
             return []
         return [e for e in elements if self(e)]
@@ -145,8 +142,6 @@ class Facet:
                 templates = [
                     t.replace("shall", "may").replace("Shall", "May").replace("must", "may") for t in templates
                 ]
-        else:
-            assert False, clause_type
 
         for template in templates:
             total_variables = len(template) - len(template.replace("{", ""))
@@ -183,6 +178,117 @@ class Facet:
     def __call__(self, inst: ifcopenshell.entity_instance, logger: Optional[Logger] = None) -> Result:
         raise NotImplementedError
 
+    """ Extension Patrick Loibl: The following method has been added to check the attributes of a linked element.
+    If the check is successful up to the point where the method is called and the facet has another property facet, the check begins.
+    :param self: An instance of the PartOf class
+    :type self: An instance of the PartOf class
+    :param element: The IfcObject required for the property check
+    :type element: IfcObject
+    :param is_pass: Returns the status of the check
+    :type is_pass: Boolean
+    :param reason: Returns the reason if the check fails
+    :type reason: None or Dictionary
+    :returns: the variables is_pass and reason
+    :rtype: a tuple
+    """  
+    def property_check(self, element, is_pass, reason):
+        if is_pass and hasattr(self,"property") and self.property !=[] and hasattr(self,"extendedSpecification"):
+            for facet in self.extendedSpecification:
+                if isinstance(facet,Property):
+                    result = facet(element)
+                    is_pass = result.is_pass
+                    reason = {"type": "ENTITY", "actual": "the entity has one or more false properties"}  
+                    if not is_pass:
+                        facet.failures.append(FacetFailure(element=element, reason=str(result)))
+                        break 
+                    else: facet.passed_entities.add(element)
+            return is_pass,reason
+        else:
+            return is_pass,reason
+
+    """ Extension Patrick Loibl: The following method has been added to check the attributes of a linked element.
+    If the check is successful up to the point where the method is called and the facet has an attribute facet, the check begins. 
+    :param self: Instance of the PartOf class
+    :type self: Instance of the PartOf class
+    :param element: The IfcObject required for the attribute check
+    :type element: IfcObject
+    :param is_pass: returns the status of the check
+    :type is_pass: Boolean
+    :param reason: returns the reason if the check fails
+    :type reason: None or Dictionary
+    :returns: the variables is_pass and reason
+    :rtype: a tuple
+    """
+    def attribute_check(self, element,is_pass,reason):
+        if is_pass and hasattr(self,"attribute") and self.attribute !=[] and hasattr(self,"extendedSpecification"):
+            for facet in self.extendedSpecification:
+                if isinstance(facet,Attribute):
+                    result = facet(element)
+                    is_pass = result.is_pass
+                    reason = {"type": "ENTITY", "actual": "the entity has one or more false attributes"}    
+                    if not is_pass:
+                        facet.failures.append(FacetFailure(element=element, reason=str(result)))
+                        break
+                    else: facet.passed_entities.add(element)
+            return is_pass,reason
+        else:
+            return is_pass,reason
+        
+    """ Extension Patrick Loibl: The following method has been added to check the attributes of a linked element.
+    If the check is successful up to the point where the method is called and the facet has another material facet, the check begins.
+    :param self: An instance of the PartOf class
+    :type self: An instance of the PartOf class
+    :param element: The IfcObject required for the property check
+    :type element: IfcObject
+    :param is_pass: Returns the status of the check
+    :type is_pass: Boolean
+    :param reason: Returns the reason if the check fails
+    :type reason: None or Dictionary
+    :returns: the variables is_pass and reason
+    :rtype: a tuple
+    """  
+    def material_check(self, element,is_pass,reason):
+        if is_pass and hasattr(self,"material") and self.material !=[] and hasattr(self,"extendedSpecification"):
+            for facet in self.extendedSpecification:
+                if isinstance(facet,Material):
+                    result = facet(element)
+                    is_pass = result.is_pass
+                    if not is_pass:
+                        reason = {"type": "ENTITY", "actual": "the entity has no or a false material"}
+                        facet.failures.append(FacetFailure(element=element, reason=str(result)))
+                        break
+                    else: facet.passed_entities.add(element)    
+            return is_pass,reason
+        else:
+            return is_pass,reason 
+
+    """ Extension Patrick Loibl: The following method has been added to check the attributes of a linked element.
+    If the check is successful up to the point where the method is called and the facet has another entity facet, the check begins.
+    :param self: An instance of the PartOf class
+    :type self: An instance of the PartOf class
+    :param element: The IfcObject required for the property check
+    :type element: IfcObject
+    :param is_pass: Returns the status of the check
+    :type is_pass: Boolean
+    :param reason: Returns the reason if the check fails
+    :type reason: None or Dictionary
+    :returns: the variables is_pass and reason
+    :rtype: a tuple
+    """  
+    def entity_check(self, element, is_pass, reason):
+        if is_pass and hasattr(self,"entity") and self.entity !=[] and hasattr(self,"extendedSpecification"):
+            for facet in self.extendedSpecification:
+                if isinstance(facet,Entity):
+                    result = facet(element)
+                    is_pass = result.is_pass
+                    if not is_pass:
+                        reason = {"type": "ENTITY", "actual": "The element does not have the correct entity."}  
+                        facet.failures.append(FacetFailure(element=element, reason=str(result)))
+                        break
+                    else: facet.passed_entities.add(element)
+            return is_pass,reason
+        else:
+            return is_pass,reason
 
 class Entity(Facet):
     def __init__(self, name="IFCWALL", predefinedType=None, instructions=None):
@@ -202,36 +308,32 @@ class Entity(Facet):
         super().__init__(name, predefinedType, instructions)
 
     def filter(
-        self, ifc_file: ifcopenshell.file, elements: Optional[Sequence[ifcopenshell.entity_instance]] = None
-    ) -> Sequence[ifcopenshell.entity_instance]:
-        if elements is not None:
+        self, ifc_file: ifcopenshell.file, elements: Optional[list[ifcopenshell.entity_instance]] = None
+    ) -> list[ifcopenshell.entity_instance]:
+        if isinstance(elements, list):
             return super().filter(ifc_file, elements)
 
-        if ifc_file.schema == "IFC2X3":
-            results = []
-            for ifc_class in ifc_file.types():
-                ifc_class = ifc_class.upper()
-                if ifc_class == self.name:
-                    results.extend(ifc_file.by_type(ifc_class, include_subtypes=False))
-            for element_type in ifc_file.by_type("IfcTypeProduct"):
-                derived_occurrence_class = element_type.is_a().upper().removesuffix("TYPE").removesuffix("STYLE")
-                if derived_occurrence_class == self.name:
-                    results.extend(ifcopenshell.util.element.get_types(element_type))
-            results = list(set(results))
-        else:
-            if isinstance(self.name, str):
-                try:
-                    results = ifc_file.by_type(self.name, include_subtypes=False)
-                except:
-                    results = []  # If the user has specified a class that doesn't exist in the version
-            else:
+        if isinstance(self.name, str):
+            try:
+                results = ifc_file.by_type(self.name, include_subtypes=False)
+            except:
+                # If the user has specified a class that doesn't exist in the version
                 results = []
-                ifc_classes = [t for t in ifc_file.types() if t.upper() == self.name]
-                for ifc_class in ifc_classes:
+                if not self.name.endswith("TYPE"):
                     try:
-                        results.extend(ifc_file.by_type(ifc_class, include_subtypes=False))
+                        for element_type in ifc_file.by_type(f"{self.name}Type"):
+                            results.extend(ifcopenshell.util.element.get_types(element_type))
                     except:
-                        continue  # If the user has specified a class that doesn't exist in the version
+                        pass
+        else:
+            results = []
+            ifc_classes = [t for t in ifc_file.wrapped_data.types() if t.upper() == self.name]
+            for ifc_class in ifc_classes:
+                try:
+                    results.extend(ifc_file.by_type(ifc_class, include_subtypes=False))
+                except:
+                    # If the user has specified a class that doesn't exist in the version
+                    continue
         if self.predefinedType:
             return [r for r in results if self(r)]
         return results
@@ -243,16 +345,14 @@ class Entity(Facet):
         if (
             not is_pass
             and inst.file.schema == "IFC2X3"
+            and not self.name.endswith("TYPE")
             and (element_type := ifcopenshell.util.element.get_type(inst))
-            and element_type != inst
         ):
-            derived_occurrence_class = element_type.is_a().upper().removesuffix("TYPE").removesuffix("STYLE")
-            is_pass = derived_occurrence_class == self.name
-            reason = {"type": "NAME", "actual": derived_occurrence_class}
+            is_pass = element_type.is_a().upper() == f"{self.name}TYPE"
+            reason = {"type": "NAME", "actual": element_type.is_a().upper()[:-4]}
         elif not is_pass:
             reason = {"type": "NAME", "actual": inst.is_a().upper()}
 
-        predefined_type = None
         if is_pass and self.predefinedType:
             if self.predefinedType == "USERDEFINED":
                 is_pass = ifcopenshell.util.element.is_userdefined_type(inst)
@@ -265,11 +365,15 @@ class Entity(Facet):
             if not is_pass:
                 reason = {"type": "PREDEFINEDTYPE", "actual": predefined_type}
 
+        # Extension Patrick Loibl
+        if is_pass:
+            self.passed_entities.add(inst)
+        # Extension end   
         return EntityResult(is_pass, reason)
 
 
 class Attribute(Facet):
-    def __init__(self, name="Name", value=None, cardinality: Cardinality = "required", instructions=None):
+    def __init__(self, name="Name", value=None, cardinality: Cardinality = "required", instructions=None): 
         self.parameters = ["name", "value", "@cardinality", "@instructions"]
         self.applicability_templates = [
             "Data where the {name} is {value}",
@@ -284,11 +388,10 @@ class Attribute(Facet):
             "The {name} shall not be provided",
         ]
         super().__init__(name, value, cardinality, instructions)
-
     def filter(
-        self, ifc_file: ifcopenshell.file, elements: Optional[Sequence[ifcopenshell.entity_instance]]
-    ) -> Sequence[ifcopenshell.entity_instance]:
-        if elements is not None:
+        self, ifc_file: ifcopenshell.file, elements: Optional[list[ifcopenshell.entity_instance]]
+    ) -> list[ifcopenshell.entity_instance]:
+        if isinstance(elements, list):
             return super().filter(ifc_file, elements)
 
         results = []
@@ -316,9 +419,14 @@ class Attribute(Facet):
     def __call__(self, inst: ifcopenshell.entity_instance, logger: Optional[Logger] = None) -> AttributeResult:
         if isinstance(self.name, str):
             names = [self.name]
-            attribute_type = inst.get_attribute_category(self.name)
+            attribute_type = inst.wrapped_data.get_attribute_category(self.name)
             if attribute_type == 1:  # Forward attribute
                 values = [getattr(inst, self.name, None)]
+            # Extension Patrick Loibl
+            elif attribute_type ==2:
+                # Here, the inverse attributes are automatically retrieved by a corresponding function in IfcTester
+                values = [getattr(inst, self.name, None)]
+            # Extension end
             else:
                 values = []
         else:
@@ -327,7 +435,7 @@ class Attribute(Facet):
             values = []
             for k, v in info.items():
                 if k == self.name:
-                    attribute_type = inst.get_attribute_category(k)
+                    attribute_type = inst.wrapped_data.get_attribute_category(k)
                     if attribute_type == 1:  # Forward attribute
                         names.append(k)
                         values.append(v)
@@ -351,14 +459,16 @@ class Attribute(Facet):
                 elif value == tuple():
                     is_empty = True
                 else:
-                    argument_index = inst.get_argument_index(names[i])
+                    argument_index = inst.wrapped_data.get_argument_index(names[i])
                     try:
                         attribute_type = inst.attribute_type(argument_index)
                         if attribute_type == "LOGICAL" and value == "UNKNOWN":
                             is_empty = True
                     except:
-                        if names[i] in inst.get_inverse_attribute_names():
-                            is_empty = True
+                        if names[i] in inst.wrapped_data.get_inverse_attribute_names():
+                            #Extension Patrick Loibl: Changed to false to include inverse attributes
+                            is_empty = False
+                            #Extension end
                 if not is_empty:
                     non_empty_values.append(value)
             if non_empty_values:
@@ -367,7 +477,12 @@ class Attribute(Facet):
                 is_pass = False
                 reason = {"type": "FALSEY", "actual": values if len(values) > 1 else values[0]}
 
+        # Part 1: normal value attributes are used
         if is_pass and self.value:
+            #Extension Simon Fischer: Flatten the Return list for the case the Attribute value contains lists
+            values = [x for item in values for x in (item if isinstance(item, tuple) else [item])]
+            #Extension end
+            
             for value in values:
                 if isinstance(value, ifcopenshell.entity_instance):
                     is_pass = False
@@ -393,12 +508,35 @@ class Attribute(Facet):
                     is_pass = False
                     reason = {"type": "VALUE", "actual": value}
                     break
+            if is_pass:
+               self.passed_entities.add(inst)     
+        # Part 2: extended attribute facet
+        # Extension Patrick Loibl: All the extensions of the attribute facet can be found in this elif-statement.
+        elif is_pass and (hasattr(self,"entity") or hasattr(self,"attribute") or hasattr(self,"property") or hasattr(self,"material")):
+            self.passed_entities.add(inst)
+            #Extension Simon Fischer: Flatten the Return list for the case the Attribute value contains lists
+            values = [x for item in values for x in (item if isinstance(item, tuple) else [item])]
+            
+            for value in values:
+                is_pass = True            
+                (is_pass,reason) = self.entity_check(value,is_pass,reason)
+                (is_pass,reason) = self.attribute_check(value,is_pass,reason)
+                (is_pass,reason) = self.property_check(value,is_pass,reason)
+                (is_pass,reason) = self.material_check(value,is_pass,reason)
+
+                if is_pass:
+                    break
+                else:
+                    is_pass = False
+                    reason = {"type": "VALUE", "actual": value}
+        elif is_pass:
+            self.passed_entities.add(inst)
+        #Extension end
 
         if self.cardinality == "prohibited":
             return AttributeResult(not is_pass, {"type": "PROHIBITED"})
         return AttributeResult(is_pass, reason)
-
-
+        
 class Classification(Facet):
     def __init__(self, value=None, system=None, uri=None, cardinality: Cardinality = "required", instructions=None):
         self.parameters = ["value", "system", "@uri", "@cardinality", "@instructions"]
@@ -421,9 +559,9 @@ class Classification(Facet):
         super().__init__(value, system, uri, cardinality, instructions)
 
     def filter(
-        self, ifc_file: ifcopenshell.file, elements: Optional[Sequence[ifcopenshell.entity_instance]]
-    ) -> Sequence[ifcopenshell.entity_instance]:
-        if elements is not None:
+        self, ifc_file: ifcopenshell.file, elements: Optional[list[ifcopenshell.entity_instance]]
+    ) -> list[ifcopenshell.entity_instance]:
+        if isinstance(elements, list):
             return super().filter(ifc_file, elements)
         return ifc_file.by_type("IfcObjectDefinition")
 
@@ -457,6 +595,10 @@ class Classification(Facet):
 
         if self.cardinality == "prohibited":
             return ClassificationResult(not is_pass, {"type": "PROHIBITED"})
+        # Extension Patrick Loibl
+        if is_pass:
+            self.passed_entities.add(inst)
+        # Extension end   
         return ClassificationResult(is_pass, reason)
 
 
@@ -473,6 +615,7 @@ class PartOf(Facet):
         self.applicability_templates = [
             "An element with an {relation} relationship with an {name}",
             "An element with an {relation} relationship",
+            "An element with a relationship with an {name}",
         ]
         self.requirement_templates = [
             "An element must have an {relation} relationship with an {name} of predefined type {predefinedType}",
@@ -486,9 +629,9 @@ class PartOf(Facet):
         super().__init__(name, predefinedType, relation, cardinality, instructions)
 
     def filter(
-        self, ifc_file: ifcopenshell.file, elements: Optional[Sequence[ifcopenshell.entity_instance]]
-    ) -> Sequence[ifcopenshell.entity_instance]:
-        if elements is not None:
+        self, ifc_file: ifcopenshell.file, elements: Optional[list[ifcopenshell.entity_instance]]
+    ) -> list[ifcopenshell.entity_instance]:
+        if isinstance(elements, list):
             return super().filter(ifc_file, elements)
         return list(ifc_file)  # Lazy
 
@@ -508,8 +651,10 @@ class PartOf(Facet):
     def parse(self, xml):
         if "entity" in xml:
             super().parse(xml["entity"])
-            del xml["entity"]
-        return super().parse(xml)
+        result = super().parse(xml)
+        if hasattr(self, "entity"):
+            delattr(self, "entity")
+        return result
 
     def __call__(self, inst: ifcopenshell.entity_instance, logger: Optional[Logger] = None) -> PartOfResult:
         reason = None
@@ -531,6 +676,12 @@ class PartOf(Facet):
                 parent = self.get_parent(parent)
             if not is_pass:
                 reason = {"type": "ENTITY", "actual": ancestors}
+            # Extension Patrick Loibl
+            if is_pass:
+                self.passed_entities.add(inst)
+            # Extension end  
+            (is_pass,reason) = self.attribute_check(parent,is_pass,reason) #  Extension Patrick Loibl
+            (is_pass,reason) = self.property_check(parent,is_pass,reason) #  Extension Patrick Loibl
         elif self.relation == "IFCRELAGGREGATES":
             aggregate = ifcopenshell.util.element.get_aggregate(inst)
             is_pass = aggregate is not None
@@ -553,6 +704,12 @@ class PartOf(Facet):
                     aggregate = ifcopenshell.util.element.get_aggregate(aggregate)
                 if not is_pass:
                     reason = {"type": "ENTITY", "actual": ancestors}
+            # Extension Patrick Loibl
+            if is_pass:
+                self.passed_entities.add(inst)
+            # Extension end  
+            (is_pass,reason) = self.attribute_check(aggregate,is_pass,reason) #  Extension Patrick Loibl
+            (is_pass,reason) = self.property_check(aggregate,is_pass,reason) #  Extension Patrick Loibl
         elif self.relation == "IFCRELASSIGNSTOGROUP":
             group = None
             for rel in getattr(inst, "HasAssignments", []) or []:
@@ -571,6 +728,12 @@ class PartOf(Facet):
                     if predefined_type != self.predefinedType:
                         is_pass = False
                         reason = {"type": "PREDEFINEDTYPE", "actual": predefined_type}
+            # Extension Patrick Loibl
+            if is_pass:
+                self.passed_entities.add(inst)
+            # Extension end  
+            (is_pass,reason) = self.attribute_check(group,is_pass,reason) #  Extension Patrick Loibl
+            (is_pass,reason) = self.property_check(group,is_pass,reason) #  Extension Patrick Loibl
         elif self.relation == "IFCRELCONTAINEDINSPATIALSTRUCTURE":
             container = ifcopenshell.util.element.get_container(inst)
             is_pass = container is not None
@@ -585,6 +748,12 @@ class PartOf(Facet):
                     if predefined_type != self.predefinedType:
                         is_pass = False
                         reason = {"type": "PREDEFINEDTYPE", "actual": predefined_type}
+            # Extension Patrick Loibl
+            if is_pass:
+                self.passed_entities.add(inst)
+            # Extension end  
+            (is_pass,reason) = self.attribute_check(container,is_pass,reason) #  Extension Patrick Loibl
+            (is_pass,reason) = self.property_check(container,is_pass,reason) #  Extension Patrick Loibl
         elif self.relation == "IFCRELNESTS":
             nest = ifcopenshell.util.element.get_nest(inst)
             is_pass = nest is not None
@@ -607,6 +776,12 @@ class PartOf(Facet):
                     nest = ifcopenshell.util.element.get_nest(nest)
                 if not is_pass:
                     reason = {"type": "ENTITY", "actual": ancestors}
+            # Extension Patrick Loibl
+            if is_pass:
+                self.passed_entities.add(inst)
+            # Extension end  
+            (is_pass,reason) = self.attribute_check(nest,is_pass,reason) #  Extension Patrick Loibl
+            (is_pass,reason) = self.property_check(nest,is_pass,reason) #  Extension Patrick Loibl
         elif self.relation == "IFCRELVOIDSELEMENT IFCRELFILLSELEMENT":
             if inst.is_a("IfcOpeningElement"):
                 building_element = ifcopenshell.util.element.get_voided_element(inst)
@@ -627,12 +802,203 @@ class PartOf(Facet):
                     if predefined_type != self.predefinedType:
                         is_pass = False
                         reason = {"type": "PREDEFINEDTYPE", "actual": predefined_type}
-        else:
-            assert False, self.relation
+            # Extension Patrick Loibl
+            if is_pass:
+                self.passed_entities.add(inst)
+            # Extension end  
+            (is_pass,reason) = self.attribute_check(building_element,is_pass,reason) #  Extension Patrick Loibl 
+            (is_pass,reason) = self.property_check(building_element,is_pass,reason) #  Extension Patrick Loibl
+        #  Extension Patrick Loibl: This elif block was added to use the new relation.
+        elif self.relation == "IFCRELSPACEBOUNDARY":
+            type = inst.wrapped_data.is_a(True).split(".")[1]
+            elements = []
+            if type == "IfcSpace":
+                # First, all spaces are retrieved and stored in a list.
+                for i in range(0,len(inst.BoundedBy)): # If a relatedBuildingElement is “None”, it is not considered a SpaceBoundary and is therefore not added to the list
+                    relatedBuildingElement = inst.BoundedBy[i].RelatedBuildingElement
+                    if relatedBuildingElement!=None:
+                        elements.append(relatedBuildingElement)
+            elif hasattr(inst,"ProvidesBoundaries"):
+                # First, all boundaries are retrieved and stored in a list.
+                for i in range(0,len(inst.ProvidesBoundaries)):
+                    elements.append(inst.ProvidesBoundaries[i].RelatingSpace)
+            # If no boundaries are present, is_pass is set to False, a reason is created, and the check is complete.
+            is_pass = bool(len(elements))
+            if not is_pass:
+                reason = {"type": "NOVALUE"}
+            # If boundaries exist, the correct type is checked; depending on the result, `is_pass` is set accordingly, and the check continues.
+            else:
+                elements_to_check = set()
+                for element in elements:
+                    elementtyp = element.wrapped_data.is_a(True).split(".")[1]
+                    if elementtyp.upper() == self.name:
+                        elements_to_check.add(element)
+                if len(elements_to_check) > 0:    
+                    is_pass=True
+                    # Extension Patrick Loibl
+                    if is_pass:
+                        self.passed_entities.add(inst)
+                    # Extension end  
+                    (is_pass,reason) = self.checkSpaceBoundary(elements_to_check, is_pass,reason)
+                else:
+                    is_pass = False
+                    reason = {"type": "ENTITY", "actual": elementtyp}
+        # Extension end
 
         if self.cardinality == "prohibited":
             return PartOfResult(not is_pass, {"type": "PROHIBITED"})
         return PartOfResult(is_pass, reason)
+
+    """ Extension Patrick Loibl: The following method checks the attributes, properties, and other associated elements for the identified space boundaries.
+    :param self: Instance of the PartOf class
+    :type self: Instance of the PartOf class
+    :param elements_to_check: Contains the spaces or boundary objects to be checked
+    :type elements_to_check:  List of IFC objects
+    :param is_pass: Returns the status of the check
+    :type is_pass: Boolean
+    :param reason: returns the reason if the check fails
+    :type reason: None or Dictionary
+    :returns: the variables is_pass and reason
+    :rtype: a tuple
+    """
+    def checkSpaceBoundary(self, elements_to_check, is_pass, reason):
+        # If at least one valid element is present, the attribute check is performed first.
+        for element in elements_to_check:
+            is_pass = True
+            (is_pass,reason) = self.attribute_check(element,is_pass,reason)
+            #if not is_pass:
+            #    break # Eigentlich nicht unbedingt notwendig, aber beschleunigt den Code, da es sofort abbricht bei einem falschen Ergebnis.
+            if is_pass:
+                break
+        if is_pass:
+            # If no difference in properties is required or an incorrect keyword is specified, the first block runs.
+            # This block performs the property check for the respective elements. As soon as a element meets the criterion, the check can be terminated.
+            if (not hasattr(self,"multiElementProcessing")) or (hasattr(self,"multiElementProcessing") and self.multiElementProcessing not in ["allElementsMustComply", "noElementMayComply", "samePropertyValuesForAllElements", "differentPropertyValuesForAnyElement","differentElementsForEachProperty"]):
+                for element in elements_to_check:
+                    is_pass = True
+                    (is_pass,reason) = self.property_check(element,is_pass,reason)
+                    if is_pass:
+                        break 
+            elif hasattr(self,"multiElementProcessing") and self.multiElementProcessing == "allElementsMustComply":
+                (is_pass,reason) =  self.property_check_combined(elements_to_check,is_pass,reason,"all")
+            elif hasattr(self,"multiElementProcessing") and self.multiElementProcessing == "noElementMayComply":
+                (is_pass,reason) =  self.property_check_combined(elements_to_check,is_pass,reason,"none")
+            # This block covers the case where adjacent objects are supposed to have the same value for a property.
+            # Since there must not be a predefined property value, a property check is not necessary.
+            # A check to determine whether the property even exists is performed in propertyValueComparisonOfMultipleElements.
+            elif hasattr(self,"multiElementProcessing") and self.multiElementProcessing == "samePropertyValuesForAllElements":
+                (is_pass,reason)=self.propertyValueComparisonOfMultipleElements(elements_to_check, "same")          
+            # The third block handles the case where different properties must be present for the respective rooms.
+            # First, the system checks whether at least one room meets the property requirements.
+            # Then, it checks for the different properties.
+            elif hasattr(self,"multiElementProcessing") and self.multiElementProcessing == "differentPropertyValuesForAnyElement":
+                for element in elements_to_check:    
+                    is_pass=True
+                    (is_pass,reason) = self.property_check(element,is_pass,reason)
+                    if is_pass:
+                        break                                
+                if is_pass:
+                    (is_pass,reason)=self.propertyValueComparisonOfMultipleElements(elements_to_check, "different")
+            # The last block covers the case where at least one element must be present for each of the specified properties.
+            # First, the properties to be checked are identified. Then, each element is checked until it satisfies a property.
+            # That property is then removed from the requirements, and the process continues with the next element.
+            # Once all properties have been satisfied, the test is passed.
+            elif hasattr(self,"multiElementProcessing") and self.multiElementProcessing == "differentElementsForEachProperty" and hasattr(self,"extendedSpecification"):
+                properties_to_check = [specification for specification in self.extendedSpecification if isinstance(specification, Property)]
+                for element in elements_to_check:
+                    for property_to_check in properties_to_check[:]:
+                        if property_to_check(element).is_pass:
+                            properties_to_check.remove(property_to_check)
+                            break
+                        else:
+                            continue
+                if len(properties_to_check) == 0:
+                    is_pass = True
+                else:
+                    is_pass = False
+                    reason = {"type": "ENTITY", "actual": "there are no different elements"}
+        
+        return is_pass,reason
+
+    """ Extension Patrick Loibl: The following method detects a difference in the properties for the “differentPropertiesForAnyElement” type.
+    The properties of the respective elements are retrieved and stored in a set. If more than one value is stored in the set, there is a difference.
+    :param self: Instance of the PartOf class
+    :type self: Instance of the PartOf class
+    :param elements_to_check: Contains the rooms or boundary objects from which the properties are to be determined
+    :type elements_to_check: List of IfcObjects
+    :param value: Determines whether the properties must be either different or the same
+    :type value: String
+    :returns: the variables `is_pass` and `reason`
+    :rtype: a tuple
+    """
+    def propertyValueComparisonOfMultipleElements(self, elements_to_check, value):
+        is_pass=False
+        elementsWithoutProperty = False
+        if len(elements_to_check) <= 1:
+            is_pass = False
+            reason = {"type": "ENTITY", "actual": "not enough related entities found"}
+        else:
+            if hasattr(self,"extendedSpecification"):
+                for facet in self.extendedSpecification:
+                    if isinstance(facet,Property):
+                        different_values = set()
+                        for element in elements_to_check:
+                            result_property = facet(element)
+                            if result_property.reason["type"] == "VALUE":
+                                element_property_value = result_property.reason["actual"]
+                                different_values.add(element_property_value)
+                            else:
+                                elementsWithoutProperty = True
+                        if value == "different":
+                            if (len(different_values) > 1) or (len(different_values) >= 1 and elementsWithoutProperty):
+                                is_pass = True
+                                reason = None
+                            else:
+                                is_pass = False
+                                reason = {"type": "ENTITY", "actual": "the entities have no difference between their properties"}
+                                break
+                        elif value == "same":
+                            if len(different_values) == 1 and not elementsWithoutProperty:
+                                is_pass = True
+                                reason = None
+                            else:
+                                is_pass = False
+                                reason = {"type": "ENTITY", "actual": "the entities have no same property"}
+                                break 
+        return is_pass,reason
+    
+    """ Extension Simon Fischer: Method to check Property facets for a group of elements combined.
+    If the keyword is none, no element is allowed to fulfil the facet.
+    If the keyword is all, all elements must fulfil the facet.
+    :param self: Instance of the PartOf class
+    :type self: Instance of the PartOf class
+    :param elements_to_check: List of IFC objects to be checked
+    :type element_toCheck: List
+    :param is_pass: Returns the status of the check
+    :type is_pass: Boolean
+    :param reason: Returns the reason if the check fails
+    :type reason: None or Dictionary
+    :returns: The variables is_pass and reason
+    :rtype: A tuple
+    """
+    def property_check_combined(self,elements_to_check,is_pass,reason,keyword):
+        if is_pass and hasattr(self,"property") and self.property !=[] and hasattr(self,"extendedSpecification"):
+            for facet in self.extendedSpecification:
+                if isinstance(facet,Property):
+                    number_of_passed_elements = 0
+                    for element in elements_to_check:
+                        result = facet(element)
+                        element_is_pass = result.is_pass
+                          
+                        if element_is_pass:
+                            number_of_passed_elements += 1
+                    if (keyword == "none" and number_of_passed_elements > 0) or (keyword == "all" and number_of_passed_elements < len(elements_to_check)):
+                        is_pass = False
+                        reason = {"type": "ENTITY", "actual": "the entity has one or more false properties"}
+                        break
+            return is_pass,reason
+        else:
+            return is_pass,reason
 
     def get_parent(self, element):
         parent = ifcopenshell.util.element.get_parent(element)
@@ -679,9 +1045,9 @@ class Property(Facet):
         super().__init__(propertySet, baseName, value, dataType, uri, cardinality, instructions)
 
     def filter(
-        self, ifc_file: ifcopenshell.file, elements: Optional[Sequence[ifcopenshell.entity_instance]]
-    ) -> Sequence[ifcopenshell.entity_instance]:
-        if elements is not None:
+        self, ifc_file: ifcopenshell.file, elements: Optional[list[ifcopenshell.entity_instance]]
+    ) -> list[ifcopenshell.entity_instance]:
+        if isinstance(elements, list):
             return super().filter(ifc_file, elements)
         if ifc_file.schema == "IFC2X3":
             return ifc_file.by_type("IfcObjectDefinition")
@@ -705,7 +1071,7 @@ class Property(Facet):
         if not is_pass:
             if self.cardinality == "optional":
                 return PropertyResult(True)
-            reason = {"type": "NOPSET"}
+            reason = {"type": "NOPSET", "actual": self.propertySet} # Extension Patrick Loibl: The name of the PropertySet is specified
 
         if is_pass:
             props = {}
@@ -714,7 +1080,9 @@ class Property(Facet):
                 if isinstance(self.baseName, str):
                     prop = pset_props.get(self.baseName)
                     if prop == "UNKNOWN" and next(
-                        p for p in self.get_properties(inst.file.by_id(pset_props["id"])) if p.Name == self.baseName
+                        p
+                        for p in self.get_properties(inst.wrapped_data.file.by_id(pset_props["id"]))
+                        if p.Name == self.baseName
                     ).NominalValue.is_a("IfcLogical"):
                         pass
                     elif prop is not None and prop != "":
@@ -731,7 +1099,7 @@ class Property(Facet):
                     reason = {"type": "NOVALUE"}
                     break
 
-                pset_entity = inst.file.by_id(pset_props["id"])
+                pset_entity = inst.wrapped_data.file.by_id(pset_props["id"])
 
                 is_property_supported_class = True
                 for prop_entity in self.get_properties(pset_entity):
@@ -748,7 +1116,7 @@ class Property(Facet):
                             reason = {"type": "DATATYPE", "actual": data_type, "dataType": self.dataType}
                             break
 
-                        unit = ifcopenshell.util.unit.get_property_unit(prop_entity, inst.file)
+                        unit = ifcopenshell.util.unit.get_property_unit(prop_entity, inst.wrapped_data.file)
                         if unit and getattr(unit, "Name", None):
                             # TODO support unnamed derived units
                             output_prefix = "KILO" if unit.UnitType == "MASSUNIT" else None
@@ -760,7 +1128,7 @@ class Property(Facet):
                                 ifcopenshell.util.unit.si_type_names[unit.UnitType],
                             )
                     elif prop_entity.is_a("IfcPhysicalSimpleQuantity"):
-                        prop_schema = prop_entity.declaration.as_entity()
+                        prop_schema = prop_entity.wrapped_data.declaration().as_entity()
                         data_type = prop_schema.attribute_by_index(3).type_of_attribute().declared_type().name()
 
                         if self.dataType and data_type.lower() != self.dataType.lower():
@@ -768,7 +1136,7 @@ class Property(Facet):
                             reason = {"type": "DATATYPE", "actual": data_type, "dataType": self.dataType}
                             break
 
-                        unit = ifcopenshell.util.unit.get_property_unit(prop_entity, inst.file)
+                        unit = ifcopenshell.util.unit.get_property_unit(prop_entity, inst.wrapped_data.file)
                         if unit:
                             props[pset_name][prop_entity.Name] = ifcopenshell.util.unit.convert(
                                 prop_entity[3],
@@ -797,7 +1165,7 @@ class Property(Facet):
                             is_pass = False
                             reason = {"type": "DATATYPE", "actual": data_type, "dataType": self.dataType}
                             break
-                        unit = ifcopenshell.util.unit.get_property_unit(prop_entity, inst.file)
+                        unit = ifcopenshell.util.unit.get_property_unit(prop_entity, inst.wrapped_data.file)
                         if unit:
                             props[pset_name][prop_entity.Name] = [
                                 ifcopenshell.util.unit.convert(
@@ -811,18 +1179,16 @@ class Property(Facet):
                             ]
                     elif prop_entity.is_a("IfcPropertyBoundedValue"):
                         values = []
-                        data_type = None
                         for attribute in ["UpperBoundValue", "LowerBoundValue", "SetPointValue"]:
                             value = getattr(prop_entity, attribute)
                             if value is not None:
                                 data_type = value.is_a()
                                 values.append(value.wrappedValue)
-                        assert data_type is not None, prop_entity
                         if self.dataType and data_type.lower() != self.dataType.lower():
                             is_pass = False
                             reason = {"type": "DATATYPE", "actual": data_type, "dataType": self.dataType}
                             break
-                        unit = ifcopenshell.util.unit.get_property_unit(prop_entity, inst.file)
+                        unit = ifcopenshell.util.unit.get_property_unit(prop_entity, inst.wrapped_data.file)
                         if unit:
                             values = [
                                 ifcopenshell.util.unit.convert(
@@ -837,8 +1203,7 @@ class Property(Facet):
                         props[pset_name][prop_entity.Name] = values
                     elif prop_entity.is_a("IfcPropertyTableValue"):
                         values = []
-                        units = ifcopenshell.util.unit.get_property_table_unit(prop_entity, inst.file)
-                        data_type = None
+                        units = ifcopenshell.util.unit.get_property_table_unit(prop_entity, inst.wrapped_data.file)
                         for attribute in ["Defining", "Defined"]:
                             column_values = props[pset_name][prop_entity.Name][f"{attribute}Values"]
                             if not column_values:
@@ -861,7 +1226,6 @@ class Property(Facet):
                                 values.extend(column_values)
                         if not values:
                             is_pass = False
-                            assert data_type is not None, prop_entity
                             reason = {"type": "DATATYPE", "actual": data_type, "dataType": self.dataType}
                             break
                         props[pset_name][prop_entity.Name] = values
@@ -874,6 +1238,8 @@ class Property(Facet):
 
                 if not is_pass:
                     break
+
+                reason = {"type": "VALUE", "actual": props[pset_name][self.baseName]} # Extension Patrick Loibl: Always add the value to the reason if there is a value (even if is_pass = true)
 
                 if self.value:
                     for value in props[pset_name].values():
@@ -917,6 +1283,10 @@ class Property(Facet):
 
         if self.cardinality == "prohibited":
             return PropertyResult(not is_pass, {"type": "PROHIBITED"})
+        # Extension Patrick Loibl
+        if is_pass:
+            self.passed_entities.add(inst)
+        # Extension end   
         return PropertyResult(is_pass, reason)
 
     def get_properties(self, pset):
@@ -952,69 +1322,67 @@ class Material(Facet):
         super().__init__(value, uri, cardinality, instructions)
 
     def filter(
-        self, ifc_file: ifcopenshell.file, elements: Optional[Sequence[ifcopenshell.entity_instance]]
-    ) -> Sequence[ifcopenshell.entity_instance]:
-        if elements is not None:
+        self, ifc_file: ifcopenshell.file, elements: Optional[list[ifcopenshell.entity_instance]]
+    ) -> list[ifcopenshell.entity_instance]:
+        if isinstance(elements, list):
             return super().filter(ifc_file, elements)
         return ifc_file.by_type("IfcObjectDefinition")
 
     def __call__(self, inst: ifcopenshell.entity_instance, logger: Optional[Logger] = None) -> MaterialResult:
-        material = ifcopenshell.util.element.get_material(inst, should_skip_usage=True)
+        # Extension Patrick Loibl: The value parameter is used as the name, and the other facets are used as usual.
+        if self.cardinality == "optional":
+            return MaterialResult(True)
+        
+        material = ifcopenshell.util.element.get_material(inst, should_skip_usage=True) # The material associated with the entity is retrieved
 
         is_pass = material is not None
         reason = None
 
-        if not is_pass:
-            if self.cardinality == "optional":
-                return MaterialResult(True)
+        if not is_pass: # If there is no material at all, that's the end of it here
             reason = {"type": "NOVALUE"}
-
-        if is_pass and self.value:
+        else:
+            materialUsed = []
+            materialUsed.append(material)
             if material.is_a("IfcMaterial"):
-                values = {material.Name, getattr(material, "Category", None)}
+                pass  # Nothing to do here, since it's already on the list
             elif material.is_a("IfcMaterialList"):
-                values = set()
-                for mat in material.Materials or []:
-                    values.update([mat.Name, getattr(mat, "Category", None)])
+                materialUsed.extend(material.Materials) # IfcMaterialList will be removed in a future major release of the IFC standard  
             elif material.is_a("IfcMaterialLayerSet"):
-                values = {material.LayerSetName}
-                for item in material.MaterialLayers or []:
-                    values.update(
-                        [
-                            getattr(item, "Name", None),
-                            getattr(item, "Category", None),
-                            item.Material.Name,
-                            getattr(item.Material, "Category", None),
-                        ]
-                    )
+                materialUsed.extend(l for l in material.MaterialLayers)
+                materialUsed.extend(l.Material for l in material.MaterialLayers)
             elif material.is_a("IfcMaterialProfileSet"):
-                values = {material.Name}
-                for item in material.MaterialProfiles or []:
-                    values.update(
-                        [item.Name, item.Category, item.Material.Name, getattr(item.Material, "Category", None)]
-                    )
+                materialUsed.extend(p for p in material.MaterialProfiles)
+                materialUsed.extend(p.Material for p in material.MaterialProfiles)
             elif material.is_a("IfcMaterialConstituentSet"):
-                values = {material.Name}
-                for item in material.MaterialConstituents or []:
-                    values.update(
-                        [item.Name, item.Category, item.Material.Name, getattr(item.Material, "Category", None)]
-                    )
-            else:
-                assert False, material
+                materialUsed.extend(c for c in material.MaterialConstituents)
+                materialUsed.extend(c.Material for c in material.MaterialConstituents)
 
-            is_pass = False
-            for value in values:
-                if value == self.value:
+            materialUsed = [x for x in materialUsed if x is not None]
+            wrongValues = []
+            for materialIfc in materialUsed:
+                name = getattr(materialIfc, "LayerSetName", None) if materialIfc.is_a() == "IfcMaterialLayerSet" else getattr(materialIfc, "Name", None)
+                category = getattr(materialIfc, "Category", None)
+
+                if (hasattr(self,"value") and name == self.value or category == self.value) or not hasattr(self,"value"):
                     is_pass = True
-                    break
-
-            if not is_pass:
-                reason = {"type": "VALUE", "actual": values}
+                    # Extension Patrick Loibl
+                    if is_pass:
+                        self.passed_entities.add(inst)
+                    # Extension end  
+                    (is_pass,reason) = self.entity_check(materialIfc,is_pass,reason)
+                    (is_pass,reason) = self.attribute_check(materialIfc,is_pass,reason)
+                    (is_pass,reason) = self.property_check(materialIfc,is_pass,reason)
+                    if is_pass:
+                        break # If a material meets all requirements, the inspection can be terminated.
+                else:
+                    is_pass = False
+                    wrongValues.extend([name,category])
+                    reason = {"type": "VALUE", "actual": wrongValues} if (reason == None or reason["type"] != "ENTITY")else reason
+        # Extension end
 
         if self.cardinality == "prohibited":
             return MaterialResult(not is_pass, {"type": "PROHIBITED"})
-        return MaterialResult(is_pass, reason)
-
+        return MaterialResult(is_pass, reason)    
 
 class Restriction:
     def __init__(self, options=None, base="string"):
@@ -1072,10 +1440,7 @@ class Restriction:
                         return False
                     value = value if isinstance(value, list) else [value]
                     for pattern in value:
-                        xsd_pattern = translate_pattern(
-                            pattern, back_references=False, lazy_quantifiers=False, anchors=False
-                        )
-                        if re.compile(xsd_pattern).fullmatch(other) is None:
+                        if re.compile(identities.translate_pattern(pattern)).fullmatch(other) is None:
                             return False
                 elif constraint == "length":
                     if len(str(other)) != int(value):
@@ -1107,7 +1472,7 @@ class Restriction:
 
 
 class Result:
-    def __init__(self, is_pass: bool, reason: Optional[dict[str, Any]] = None):
+    def __init__(self, is_pass: bool, reason: Optional[dict[str, Any]] = {"type": None}): # Extension Patrick Loibl: There is always a reason
         self.is_pass = is_pass
         self.reason = reason
 
@@ -1124,9 +1489,9 @@ class Result:
 class EntityResult(Result):
     def to_string(self):
         if self.reason["type"] == "NAME":
-            return f'The entity class "{self.reason["actual"]}" does not meet the required IFC class'
+            return f"The entity class \"{self.reason['actual']}\" does not meet the required IFC class"
         elif self.reason["type"] == "PREDEFINEDTYPE":
-            return f'The predefined type "{str(self.reason["actual"])}" does not meet the required type'
+            return f"The predefined type \"{str(self.reason['actual'])}\" does not meet the required type"
 
 
 class AttributeResult(Result):
@@ -1134,11 +1499,11 @@ class AttributeResult(Result):
         if self.reason["type"] == "NOVALUE":
             return "The required attribute did not exist"
         elif self.reason["type"] == "FALSEY":
-            return f'The attribute value "{str(self.reason["actual"])}" is empty'
+            return f"The attribute value \"{str(self.reason['actual'])}\" is empty"
         elif self.reason["type"] == "INVALID":
             return "An invalid attribute name was specified in the IDS"
         elif self.reason["type"] == "VALUE":
-            return f'The attribute value "{str(self.reason["actual"])}" does not match the requirement'
+            return f"The attribute value \"{str(self.reason['actual'])}\" does not match the requirement"
         elif self.reason["type"] == "PROHIBITED":
             return "The attribute value should not have met the requirement"
 
@@ -1148,9 +1513,9 @@ class ClassificationResult(Result):
         if self.reason["type"] == "NOVALUE":
             return "The entity has no classification"
         elif self.reason["type"] == "VALUE":
-            return f'The references "{str(self.reason["actual"])}" do not match the requirements'
+            return f"The references \"{str(self.reason['actual'])}\" do not match the requirements"
         elif self.reason["type"] == "SYSTEM":
-            return f'The systems "{str(self.reason["actual"])}" do not match the requirements'
+            return f"The systems \"{str(self.reason['actual'])}\" do not match the requirements"
         elif self.reason["type"] == "PROHIBITED":
             return "The classification should not have met the requirement"
 
@@ -1160,9 +1525,9 @@ class PartOfResult(Result):
         if self.reason["type"] == "NOVALUE":
             return "The entity has no relationship"
         elif self.reason["type"] == "ENTITY":
-            return f'The entity has a relationship with incorrect entities: "{str(self.reason["actual"])}"'
+            return f"The entity has a relationship with incorrect entities: \"{str(self.reason['actual'])}\""
         elif self.reason["type"] == "PREDEFINEDTYPE":
-            return f'The entity has a relationship with incorrect predefined type: "{str(self.reason["actual"])}"'
+            return f"The entity has a relationship with incorrect predefined type: \"{str(self.reason['actual'])}\""
         elif self.reason["type"] == "PROHIBITED":
             return "The relationship should not have met the requirement"
 
@@ -1174,24 +1539,34 @@ class PropertyResult(Result):
         elif self.reason["type"] == "NOVALUE":
             return "The property set does not contain the required property"
         elif self.reason["type"] == "DATATYPE":
-            return f'The property\'s data type "{str(self.reason["actual"])}" does not match the required data type of "{str(self.reason["dataType"])}"'
+            return f"The property's data type \"{str(self.reason['actual'])}\" does not match the required data type of \"{str(self.reason['dataType'])}\""
         elif self.reason["type"] == "VALUE":
             if isinstance(self.reason["actual"], list):
                 if len(self.reason["actual"]) == 1:
-                    return f'The property value "{str(self.reason["actual"][0])}" does not match the requirements'
+                    return f"The property value \"{str(self.reason['actual'][0])}\" does not match the requirements"
                 else:
-                    return f'The property values "{str(self.reason["actual"])}" do not match the requirements'
+                    return f"The property values \"{str(self.reason['actual'])}\" do not match the requirements"
             else:
-                return f'The property value "{str(self.reason["actual"])}" does not match the requirements'
+                return f"The property value \"{str(self.reason['actual'])}\" does not match the requirements"
         elif self.reason["type"] == "PROHIBITED":
             return f"The property should not have met the requirement"
-
+        
 
 class MaterialResult(Result):
     def to_string(self):
         if self.reason["type"] == "NOVALUE":
             return "The entity has no material"
         elif self.reason["type"] == "VALUE":
-            return f'The material names and categories of "{str(self.reason["actual"])}" does not match the requirement'
+            return (
+                f"The material names and categories of \"{str(self.reason['actual'])}\" does not match the requirement"
+            )
         elif self.reason["type"] == "PROHIBITED":
             return f"The material should not have met the requirement"
+        # Extension Patrick Loibl
+        elif self.reason["type"] == "PROPERTY":
+            return f"The material has a false property"
+        elif self.reason["type"] == "ATTRIBUTE":
+            return f"The material has a false attribute"
+        elif self.reason["type"] == "ENTITY":
+            return f"The material entity is incorrect: \"{str(self.reason['actual'])}\""
+        # Extension end

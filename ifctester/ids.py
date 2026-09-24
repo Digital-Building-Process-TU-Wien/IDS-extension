@@ -263,6 +263,9 @@ class Specification:
             for facet_xml in facets:
                 name_capitalised = name[0].upper() + name[1:]
                 facet = globals()[name_capitalised]().parse(facet_xml or {})
+                #Extension Patrick Loibl: Including recursion for extended specification
+                facet.extendedSpecification = self.parse_clause(facet_xml)
+                #Extension end
                 results.append(facet)
         return results
 

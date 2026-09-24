@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ids xmlns="http://standards.buildingsmart.org/IDS"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://standards.buildingsmart.org/IDS http://standards.buildingsmart.org/IDS/1.0/ids.xsd">
+    <info>
+        <title>IDS for information requirements of escape route analysis</title>
+        <copyright>TU Wien</copyright>
+        <date>2024-06-06</date>
+    </info>
+    <specifications>
+        <specification name="Space general information" ifcVersion="IFC4">
+            <applicability minOccurs="1" maxOccurs="unbounded">
+                <entity>
+                    <name>
+                        <simpleValue>IFCSPACE</simpleValue>
+                    </name>
+                </entity>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>ZDB_SpaceData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>SpaceCategory</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="ND" />
+                            <xs:enumeration value="Flat" />
+                            <xs:enumeration value="Operational unit" />
+                            <xs:enumeration value="Connection room" />
+                            <xs:enumeration value="Traffic area" />
+                        </xs:restriction>
+                    </value>
+                </property>
+                <entity>
+                    <name>
+                        <simpleValue>IFCSPACE</simpleValue>
+                    </name>
+                    <predefinedType>
+                        <xs:restriction>
+                            <xs:enumeration value="NOTDEFINED" />
+                            <xs:enumeration value="PARKING" />
+                        </xs:restriction>
+                    </predefinedType>
+                </entity>
+            </requirements>
+        </specification>
+        <specification name="Escape route start space information" ifcVersion="IFC4">
+            <applicability minOccurs="1" maxOccurs="unbounded">
+                <entity>
+                    <name>
+                        <simpleValue>IFCSPACE</simpleValue>
+                    </name>
+                    <predefinedType>
+                        <simpleValue>NOTDEFINED</simpleValue>
+                    </predefinedType>
+                </entity>
+                <property dataType="IFCLABEL">
+                    <propertySet>
+                        <simpleValue>ZDB_SpaceData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>SpaceCategory</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Operational unit" />
+                            <xs:enumeration value="Connection room" />
+                            <xs:enumeration value="Traffic area" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCCOUNTMEASURE" cardinality="required">
+                    <propertySet>
+                        <simpleValue>Pset_SpaceOccupancyRequirements</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>OccupancyNumberPeak</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:integer">
+                            <xs:minInclusive value="0" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="Connection room information" ifcVersion="IFC4">
+            <applicability minOccurs="0" maxOccurs="unbounded">
+                <entity>
+                    <name>
+                        <simpleValue>IFCSPACE</simpleValue>
+                    </name>
+                </entity>
+                <property dataType="IFCLABEL">
+                    <propertySet>
+                        <simpleValue>ZDB_SpaceData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>SpaceCategory</simpleValue>
+                    </baseName>
+                    <value>
+                        <simpleValue>Connection room</simpleValue>
+                    </value>
+                </property>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLABEL" cardinality="required">
+                    <propertySet>
+                        <simpleValue>ZDB_SpaceData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>StaircaseType</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="ND" />
+                            <xs:enumeration value="OIB2Tab2ab" />
+                            <xs:enumeration value="OIB2Tab3" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="Escape route door information" ifcVersion="IFC4">
+            <applicability minOccurs="1" maxOccurs="unbounded">
+                <entity>
+                    <name>
+                        <simpleValue>IFCDOOR</simpleValue>
+                    </name>
+                </entity>
+                <property dataType="IFCLABEL">
+                    <propertySet>
+                        <simpleValue>ZDB_DoorData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>IDDoor</simpleValue>
+                    </baseName>
+                </property>
+                <property dataType="IFCLABEL">
+                    <propertySet>
+                        <simpleValue>ZDB_DoorData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>IDNextDoor</simpleValue>
+                    </baseName>
+                </property>
+            </applicability>
+        </specification>
+        <specification  name="Flat entrance door information" ifcVersion="IFC4">
+            <applicability minOccurs="0" maxOccurs="unbounded">
+                <entity>
+                    <name>
+                        <simpleValue>IFCDOOR</simpleValue>
+                    </name>
+                </entity>
+                <partOf relation="IFCRELSPACEBOUNDARY">
+                    <entity>
+                        <name>
+                            <simpleValue>IFCSPACE</simpleValue>
+                        </name>
+                    </entity>
+                    <property dataType="IFCLABEL">
+                        <propertySet>
+                            <simpleValue>ZDB_SpaceData</simpleValue>
+                        </propertySet>
+                        <baseName>
+                            <simpleValue>SpaceCategory</simpleValue>
+                        </baseName>
+                        <value>
+                            <simpleValue>Flat</simpleValue>
+                        </value>
+                    </property>
+                    <multiElementProcessing>differentPropertyValuesForAnyElement</multiElementProcessing>
+                </partOf>
+            </applicability>
+            <requirements>
+                <property dataType="IFCCOUNTMEASURE" cardinality="required">
+                    <propertySet>
+                        <simpleValue>ZDB_DoorData</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>OccupancyNumberFlat</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:integer">
+                            <xs:minExclusive value="0" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+    </specifications>
+</ids>
